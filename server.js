@@ -199,9 +199,25 @@ app.post('/send', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// Keeps the last few raw /reply calls in memory so we can confirm whether
+// BlueBubbles' webhook is actually reaching this server, and in what shape.
+// ---------------------------------------------------------------------------
+const recentReplyCalls = [];
+
+app.get('/debug/last-replies', (req, res) => {
+  if (!TEST_SECRET || req.query.secret !== TEST_SECRET) {
+    return res.sendStatus(404);
+  }
+  res.json(recentReplyCalls);
+});
+
+// ---------------------------------------------------------------------------
 // POST /reply -> BlueBubbles webhook: log the reply as a note in GHL
 // ---------------------------------------------------------------------------
 app.post('/reply', (req, res) => {
+  recentReplyCalls.unshift({ at: new Date().toISOString(), body: req.body });
+  recentReplyCalls.length = Math.min(recentReplyCalls.length, 5);
+
   // Always answer BlueBubbles straight away so its webhook never times out.
   res.sendStatus(200);
 
