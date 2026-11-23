@@ -102,6 +102,21 @@ app.get('/', (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// GET /debug/env-status -> presence-only check (no values, no hashes, no
+// secret required) of which env vars the running process sees. Safe to leave
+// public since it reveals nothing beyond true/false.
+// ---------------------------------------------------------------------------
+app.get('/debug/env-status', (_req, res) => {
+  res.json({
+    BB_URL_set: !!BB_URL && BB_URL !== 'http://localhost:1234',
+    BB_PASSWORD_set: !!BB_PASSWORD,
+    GHL_TOKEN_set: !!GHL_TOKEN,
+    GHL_LOCATION_ID_set: !!GHL_LOCATION_ID,
+    TEST_SECRET_set: !!TEST_SECRET,
+  });
+});
+
+// ---------------------------------------------------------------------------
 // GET /debug/env?secret=... -> temporary check of which env vars the running
 // process sees. Gated behind TEST_SECRET; no secret values are ever exposed,
 // only whether each one loaded.
