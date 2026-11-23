@@ -55,6 +55,7 @@ app.get('/', (_req, res) => {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PocketReach</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230f172a%22/><path d=%22M16 20h32v18H30l-6 7v-7h-8z%22 fill=%22%2322c55e%22/></svg>">
 <style>
   body {
     margin: 0;
