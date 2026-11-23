@@ -54,7 +54,7 @@ app.get('/', (_req, res) => {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BlueLink</title>
+<title>PocketReach</title>
 <style>
   body {
     margin: 0;
@@ -93,7 +93,7 @@ app.get('/', (_req, res) => {
 </head>
 <body>
   <div class="card">
-    <h1>BlueLink</h1>
+    <h1>PocketReach</h1>
     <p><span class="dot"></span>Service is up and running</p>
   </div>
 </body>
