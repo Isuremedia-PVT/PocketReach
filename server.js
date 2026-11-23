@@ -49,7 +49,55 @@ function ghlHeaders() {
 // Health check
 // ---------------------------------------------------------------------------
 app.get('/', (_req, res) => {
-  res.type('text/plain').send('BlueLink test bridge is running');
+  res.type('html').send(`<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlueLink</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .card {
+    text-align: center;
+    padding: 2.5rem 3rem;
+    border-radius: 16px;
+    background: #1e293b;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.75rem;
+  }
+  p {
+    margin: 0;
+    color: #94a3b8;
+  }
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>BlueLink</h1>
+    <p><span class="dot"></span>Service is up and running</p>
+  </div>
+</body>
+</html>`);
 });
 
 // ---------------------------------------------------------------------------
