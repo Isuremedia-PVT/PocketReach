@@ -107,19 +107,26 @@ app.get('/', (_req, res) => {
 // only whether each one loaded.
 // ---------------------------------------------------------------------------
 app.get('/debug/env', (req, res) => {
-  if (!TEST_SECRET || req.query.secret !== TEST_SECRET) {
+  // trim() tolerates stray whitespace/newlines some hosting panels add to env values
+  const given = String(req.query.secret || '').trim();
+  if (!TEST_SECRET || given !== String(TEST_SECRET).trim()) {
     return res.sendStatus(404);
   }
   // One-way fingerprint only -> lets you compare against a local value
   // without ever exposing the secret itself.
   const fingerprint = (v) =>
     v ? crypto.createHash('sha256').update(String(v)).digest('hex').slice(0, 8) : 'MISSING';
+  const fingerprintRaw = (v) =>
+    v ? crypto.createHash('sha256').update(String(v).trim()).digest('hex').slice(0, 8) : 'MISSING';
   res.json({
     BB_URL,
     BB_PASSWORD: fingerprint(BB_PASSWORD),
     GHL_TOKEN: fingerprint(GHL_TOKEN),
+    GHL_TOKEN_trimmed: fingerprintRaw(GHL_TOKEN),
     GHL_LOCATION_ID: fingerprint(GHL_LOCATION_ID),
+    GHL_LOCATION_ID_trimmed: fingerprintRaw(GHL_LOCATION_ID),
     TEST_SECRET: fingerprint(TEST_SECRET),
+    TEST_SECRET_trimmed: fingerprintRaw(TEST_SECRET),
   });
 });
 
