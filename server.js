@@ -102,6 +102,28 @@ app.get('/', (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// GET /debug/env?secret=... -> temporary check of which env vars the running
+// process sees. Gated behind TEST_SECRET; no secret values are ever exposed,
+// only whether each one loaded.
+// ---------------------------------------------------------------------------
+app.get('/debug/env', (req, res) => {
+  if (!TEST_SECRET || req.query.secret !== TEST_SECRET) {
+    return res.sendStatus(404);
+  }
+  // One-way fingerprint only -> lets you compare against a local value
+  // without ever exposing the secret itself.
+  const fingerprint = (v) =>
+    v ? crypto.createHash('sha256').update(String(v)).digest('hex').slice(0, 8) : 'MISSING';
+  res.json({
+    BB_URL,
+    BB_PASSWORD: fingerprint(BB_PASSWORD),
+    GHL_TOKEN: fingerprint(GHL_TOKEN),
+    GHL_LOCATION_ID: fingerprint(GHL_LOCATION_ID),
+    TEST_SECRET: fingerprint(TEST_SECRET),
+  });
+});
+
+// ---------------------------------------------------------------------------
 // POST /send?secret=... -> hand the message to BlueBubbles
 // ---------------------------------------------------------------------------
 app.post('/send', async (req, res) => {
