@@ -31,7 +31,11 @@ app.use(express.urlencoded({ extended: true }));
 /** Turn anything like "(882) 653-0568" or "918826530568" into "+918826530568". */
 function normalizePhone(raw) {
   if (!raw) return '';
-  const digits = String(raw).replace(/[^\d]/g, '');
+  let digits = String(raw).replace(/[^\d]/g, '');
+  // 10 bare digits means a US/Canada number with no country code (GHL often
+  // renders phone merge fields this way) - without this it gets treated as
+  // the wrong country (e.g. +31 Netherlands) once we add the "+".
+  if (digits.length === 10) digits = '1' + digits;
   return digits ? '+' + digits : '';
 }
 
