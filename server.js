@@ -300,6 +300,23 @@ async function handleReply(payload = {}) {
   } catch (err) {
     console.error(`[reply] note error: ${err.message}`);
   }
+
+  // 3. Tag the contact so GHL workflows can react to the reply.
+  try {
+    const tRes = await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
+      method: 'POST',
+      headers: ghlHeaders(),
+      body: JSON.stringify({ tags: ['replied-imessage'] }),
+    });
+    const tBody = await tRes.json().catch(() => ({}));
+    if (tRes.ok) {
+      console.log(`[reply] tagged contact ${contactId} with "replied-imessage"`);
+    } else {
+      console.error(`[reply] tag failed | status ${tRes.status} | ${JSON.stringify(tBody)}`);
+    }
+  } catch (err) {
+    console.error(`[reply] tag error: ${err.message}`);
+  }
 }
 
 // ---------------------------------------------------------------------------
